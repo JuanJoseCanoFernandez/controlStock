@@ -136,3 +136,5 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+create user 'adminTienda'@'localhost' identified by 'adminTienda';
+grant all privileges on *.* to 'adminTienda'@'localhost';
