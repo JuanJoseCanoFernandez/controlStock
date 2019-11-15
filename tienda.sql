@@ -72,10 +72,10 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`productos` (
   `idProductos` INT(11) NOT NULL AUTO_INCREMENT,
-  `precio` VARCHAR(45) NOT NULL,
-  `tipo` VARCHAR(45) NOT NULL check (tipo IN ('Movil','Tablet','Ordenador' )),
+  `tipo` VARCHAR(45) NOT NULL check ((tipo IN ('Movil','Tablet','Ordenador' )),
   `marca` VARCHAR(45) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
+  `precio` INT NOT NULL,
   `stock` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`idProductos`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC))
