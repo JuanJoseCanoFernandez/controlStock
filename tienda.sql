@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema tiendaMoviles
+-- Schema bdtienda
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema tiendaMoviles
+-- Schema bdtienda
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `tiendaMoviles` DEFAULT CHARACTER SET utf8 ;
-USE `tiendaMoviles` ;
+CREATE SCHEMA IF NOT EXISTS `bdtienda` DEFAULT CHARACTER SET utf8 ;
+USE `bdtienda` ;
 
 -- -----------------------------------------------------
--- Table `tiendaMoviles`.`tienda`
+-- Table `bdtienda`.`tienda`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`tienda` (
+CREATE TABLE IF NOT EXISTS `bdtienda`.`tienda` (
   `idTienda` INT(11) NOT NULL AUTO_INCREMENT,
   `nTienda` VARCHAR(45) NOT NULL,
   `tEmail` VARCHAR(45) NOT NULL,
@@ -29,9 +29,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tiendaMoviles`.`usuarios`
+-- Table `bdtienda`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`usuarios` (
+CREATE TABLE IF NOT EXISTS `bdtienda`.`usuarios` (
   `idusuario` INT(11) NOT NULL AUTO_INCREMENT,
   `nusuario` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
@@ -45,9 +45,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tiendaMoviles`.`compra`
+-- Table `bdtienda`.`compra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`compra` (
+CREATE TABLE IF NOT EXISTS `bdtienda`.`compra` (
   `usuarios_idusuarios` INT(11) NOT NULL,
   `tienda_idTienda` INT(11) NOT NULL,
   PRIMARY KEY (`usuarios_idusuarios`, `tienda_idTienda`),
@@ -55,12 +55,12 @@ CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`compra` (
   INDEX `fk_usuarios_has_tienda_usuarios_idx` (`usuarios_idusuarios` ASC),
   CONSTRAINT `fk_usuarios_has_tienda_tienda1`
     FOREIGN KEY (`tienda_idTienda`)
-    REFERENCES `tiendaMoviles`.`tienda` (`idTienda`)
+    REFERENCES `bdtienda`.`tienda` (`idTienda`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_usuarios_has_tienda_usuarios`
     FOREIGN KEY (`usuarios_idusuarios`)
-    REFERENCES `tiendaMoviles`.`usuarios` (`idusuario`)
+    REFERENCES `bdtienda`.`usuarios` (`idusuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -68,11 +68,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tiendaMoviles`.`productos`
+-- Table `bdtienda`.`productos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`productos` (
+CREATE TABLE IF NOT EXISTS `bdtienda`.`productos` (
   `idProductos` INT(11) NOT NULL AUTO_INCREMENT,
-  `tipo` VARCHAR(45) NOT NULL check ((tipo IN ('Movil','Tablet','Ordenador' )),
+  `tipo` VARCHAR(45) NOT NULL check (tipo IN ('Movil','Tablet','Ordenador' )),
   `marca` VARCHAR(45) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `precio` INT NOT NULL,
@@ -83,9 +83,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `tiendaMoviles`.`vende`
+-- Table `bdtienda`.`vende`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`vende` (
+CREATE TABLE IF NOT EXISTS `bdtienda`.`vende` (
   `tienda_idTienda` INT(11) NOT NULL,
   `productos_idProductos` INT(11) NOT NULL,
   PRIMARY KEY (`tienda_idTienda`, `productos_idProductos`),
@@ -93,12 +93,12 @@ CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`vende` (
   INDEX `fk_tienda_has_productos_tienda1_idx` (`tienda_idTienda` ASC),
   CONSTRAINT `fk_tienda_has_productos_productos1`
     FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `tiendaMoviles`.`productos` (`idProductos`)
+    REFERENCES `bdtienda`.`productos` (`idProductos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tienda_has_productos_tienda1`
     FOREIGN KEY (`tienda_idTienda`)
-    REFERENCES `tiendaMoviles`.`tienda` (`idTienda`)
+    REFERENCES `bdtienda`.`tienda` (`idTienda`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
