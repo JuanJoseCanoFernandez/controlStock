@@ -2,69 +2,65 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema tienda
+-- Schema tiendaMoviles
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema tienda
+-- Schema tiendaMoviles
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `tienda` DEFAULT CHARACTER SET utf8 ;
-USE `tienda` ;
+CREATE SCHEMA IF NOT EXISTS `tiendaMoviles` DEFAULT CHARACTER SET utf8 ;
+USE `tiendaMoviles` ;
 
 -- -----------------------------------------------------
--- Table `tienda`.`tienda`
+-- Table `tiendaMoviles`.`tienda`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`tienda` (
+CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`tienda` (
   `idTienda` INT(11) NOT NULL AUTO_INCREMENT,
   `nTienda` VARCHAR(45) NOT NULL,
   `tEmail` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTienda`),
-  UNIQUE INDEX `idTienda_UNIQUE` (`idTienda` ASC) VISIBLE,
-  UNIQUE INDEX `tEmail_UNIQUE` (`tEmail` ASC) VISIBLE)
+  UNIQUE INDEX `idTienda_UNIQUE` (`idTienda` ASC),
+  UNIQUE INDEX `tEmail_UNIQUE` (`tEmail` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tienda`.`usuarios`
+-- Table `tiendaMoviles`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`usuarios` (
-  `idusuarios` INT(11) NOT NULL AUTO_INCREMENT,
-  `nUsuario` VARCHAR(45) NOT NULL,
-  `passw` VARCHAR(45) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`usuarios` (
+  `idusuario` INT(11) NOT NULL AUTO_INCREMENT,
+  `nusuario` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `interes` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idusuarios`),
-  UNIQUE INDEX `nUsuario_UNIQUE` (`nUsuario` ASC) VISIBLE,
-  UNIQUE INDEX `idusuarios_UNIQUE` (`idusuarios` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+  PRIMARY KEY (`idusuario`),
+  UNIQUE INDEX `nUsuario_UNIQUE` (`nusuario` ASC),
+  UNIQUE INDEX `idusuarios_UNIQUE` (`idusuario` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tienda`.`compra`
+-- Table `tiendaMoviles`.`compra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`compra` (
+CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`compra` (
   `usuarios_idusuarios` INT(11) NOT NULL,
   `tienda_idTienda` INT(11) NOT NULL,
   PRIMARY KEY (`usuarios_idusuarios`, `tienda_idTienda`),
-  INDEX `fk_usuarios_has_tienda_tienda1_idx` (`tienda_idTienda` ASC) VISIBLE,
-  INDEX `fk_usuarios_has_tienda_usuarios_idx` (`usuarios_idusuarios` ASC) VISIBLE,
+  INDEX `fk_usuarios_has_tienda_tienda1_idx` (`tienda_idTienda` ASC),
+  INDEX `fk_usuarios_has_tienda_usuarios_idx` (`usuarios_idusuarios` ASC),
   CONSTRAINT `fk_usuarios_has_tienda_tienda1`
     FOREIGN KEY (`tienda_idTienda`)
-    REFERENCES `tienda`.`tienda` (`idTienda`)
+    REFERENCES `tiendaMoviles`.`tienda` (`idTienda`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_usuarios_has_tienda_usuarios`
     FOREIGN KEY (`usuarios_idusuarios`)
-    REFERENCES `tienda`.`usuarios` (`idusuarios`)
+    REFERENCES `tiendaMoviles`.`usuarios` (`idusuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -72,92 +68,37 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `tienda`.`productos`
+-- Table `tiendaMoviles`.`productos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`productos` (
+CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`productos` (
   `idProductos` INT(11) NOT NULL AUTO_INCREMENT,
   `precio` VARCHAR(45) NOT NULL,
-  `tipo` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idProductos`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 6
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `tienda`.`moviles`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`moviles` (
+  `tipo` VARCHAR(45) NOT NULL check (tipo IN ('Movil','Tablet','Ordenador' )),
   `marca` VARCHAR(45) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `stock` INT NOT NULL DEFAULT 0,
-  `productos_idProductos` INT(11) NOT NULL,
-  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
-  INDEX `fk_moviles_productos1_idx` (`productos_idProductos` ASC) VISIBLE,
-  CONSTRAINT `fk_moviles_productos1`
-    FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `tienda`.`productos` (`idProductos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  PRIMARY KEY (`idProductos`),
+  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `tienda`.`ordenadores`
+-- Table `tiendaMoviles`.`vende`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`ordenadores` (
-  `marca` VARCHAR(45) NOT NULL,
-  `modelo` VARCHAR(45) NOT NULL,
-  `stock` INT NOT NULL DEFAULT 0,
-  `productos_idProductos` INT(11) NOT NULL,
-  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
-  INDEX `fk_ordenadores_productos1_idx` (`productos_idProductos` ASC) VISIBLE,
-  CONSTRAINT `fk_ordenadores_productos1`
-    FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `tienda`.`productos` (`idProductos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `tienda`.`tablets`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`tablets` (
-  `marca` VARCHAR(45) NOT NULL,
-  `modelo` VARCHAR(45) NOT NULL,
-  `stock` INT NOT NULL DEFAULT 0,
-  `productos_idProductos` INT(11) NOT NULL,
-  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
-  INDEX `fk_tablets_productos1_idx` (`productos_idProductos` ASC) VISIBLE,
-  CONSTRAINT `fk_tablets_productos1`
-    FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `tienda`.`productos` (`idProductos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `tienda`.`vende`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tienda`.`vende` (
+CREATE TABLE IF NOT EXISTS `tiendaMoviles`.`vende` (
   `tienda_idTienda` INT(11) NOT NULL,
   `productos_idProductos` INT(11) NOT NULL,
   PRIMARY KEY (`tienda_idTienda`, `productos_idProductos`),
-  INDEX `fk_tienda_has_productos_productos1_idx` (`productos_idProductos` ASC) VISIBLE,
-  INDEX `fk_tienda_has_productos_tienda1_idx` (`tienda_idTienda` ASC) VISIBLE,
+  INDEX `fk_tienda_has_productos_productos1_idx` (`productos_idProductos` ASC),
+  INDEX `fk_tienda_has_productos_tienda1_idx` (`tienda_idTienda` ASC),
   CONSTRAINT `fk_tienda_has_productos_productos1`
     FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `tienda`.`productos` (`idProductos`)
+    REFERENCES `tiendaMoviles`.`productos` (`idProductos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tienda_has_productos_tienda1`
     FOREIGN KEY (`tienda_idTienda`)
-    REFERENCES `tienda`.`tienda` (`idTienda`)
+    REFERENCES `tiendaMoviles`.`tienda` (`idTienda`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
