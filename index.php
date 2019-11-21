@@ -12,6 +12,12 @@
     <?php include 'conexion.php'; ?>
   </head>
   <body>
+    <?php
+        $instance = Conexion::getInstance();
+        $conn = $instance->getConnection();
+        //var_dump($conn);
+
+    ?>
     <h1>Formularios STOCK de tienda de moviles</h1>
     <br><br><br>
     <div class="container no-gutters">
@@ -29,26 +35,23 @@
     </div>
 
 
-    <!-- POP UP USUARIO -->
-    <div id="nuevoUsuario" class="modal fade">
+    <!-- POP UP USUARIO ( class="modal fade")-->
+    <div id="nuevoUsuario">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h4 class="modal-title text-white">Nuevo USUARIO</h4>
                 </div>
                 <div class="modal-body">
-                	<form action="formulario.php" method="post" enctype="multipart/form-data">
+                	<form action="index.php" method="post" enctype="multipart/form-data">
     					<label><strong>Nombre:</strong></label><br>
     					<input type="text" name="nombre"><br><br>
 
-    					<label><strong>Contraseña:</strong></label><br>
-    					<input type="password" name="contraseña"><br><br>
-
     					<label><strong>Interés:</strong></label><br>
-    					<select name="select">
-    						<option value="value1">Value 1</option> 
-    						<option value="value2" selected>Value 2</option>
-    						<option value="value3">Value 3</option>
+    					<select name="interes">
+                        <?php
+                            $instance->listarProducto();
+                        ?>
     					</select><br><br>
 
     					<label><strong>E-Mail:</strong></label><br>
@@ -60,9 +63,19 @@
             </div>
         </div>
     </div>
+    <?php
+    if (isset($_POST["enviarUsuario"])) {
+        $nombre = $_POST["nombre"];
+        $interes = $_POST["interes"];
+        $email = $_POST["email"];
+ 
+        $nuevoUsuario = "INSERT INTO usuarios (nusuario,email,interes) values ('$nombre','$email','$interes')";
+        $result = $conn->query($nuevoUsuario);
+    }
+    ?>
 
     <!-- POP UP PRODUCTO -->
-    <div id="nuevoProducto"  class="modal fade">
+    <div id="nuevoProducto" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success">
@@ -94,32 +107,22 @@
         </div>
     </div>
 
+
     <?php
+    /*$listarProducto = "SELECT idProductos,tipo,marca,modelo from productos";
+    foreach ($conn->query($listarProducto) as $row) {
+        print $row['idProductos'].' '.$row['tipo'].' '.$row['marca'].' '.$row['modelo'].'<br>';
+    }
+    */
     if (isset($_POST["enviarProducto"])) {
         $marca = $_POST["marca"];
         $modelo = $_POST["modelo"];
         $precio = $_POST["precio"];
         $tipo = $_POST["tipo"];
-    
-        if ($tipo=='movil') {
-            $correcto = true;
-            $formulario->beginTransaction();
-            $tablaProductos = "INSERT INTO productos (precio,tipo) values ('$precio','$tipo')";
-            $tablaMoviles = "INSERT INTO moviles (marca,modelo) values ('$marca','$modelo')";
-            if ($formulario->exec($tablaProductos) == 0) $correcto = false;
-            if ($formulario->exec($tablaMoviles) == 0) $correcto = false;$correcto = false;
-
-            if ($formulario == true) {
-                $formulario->commit();
-                echo "<strong>Los campos se han añadido correctamente</strong>";
-            }
-            else{
-                $formulario->rollback();
-                echo "<strong>Los campos no se han añadido a la base de datos</strong>";
-            }
-        }
+ 
+        $nuevoProducto = "INSERT INTO productos (tipo,marca,modelo,precio) values ('$tipo','$marca','$modelo','$precio')";
+        $result = $conn->query($nuevoProducto);
     }
-
     ?>
 
     <!-- Optional JavaScript -->

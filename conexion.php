@@ -1,10 +1,47 @@
 <?php
-/*Este es el archivo sobre la conexion con la base de datos utilizando PDO*/
-try {
-	$formulario = new PDO('mysql:host=localhost;dbname=tienda', 'adminTienda', 'adminTienda');
-	echo "correcto";
-} catch (Exception $e) {
-	echo "<h2>La pagina a la que estas intentando acceder no está disponible.";
+// Singleton to connect db.
+class Conexion {
+	// Hold the class instance.
+	private static $instance = null;
+	private $conn;
+	private $host = 'localhost';
+	private $user = 'adminTienda';
+	private $pass = 'adminTienda';
+	private $name = 'bdtienda';
+	  
+	// The db connection is established in the private constructor.
+	private function __construct()
+	{
+		$this->conn = new PDO("mysql:host={$this->host};
+		dbname={$this->name}", $this->user,$this->pass,
+		array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+	}
+	  
+	public static function getInstance()
+	{
+	    if(!self::$instance)
+	    {
+	    	self::$instance = new Conexion();
+	    }
+	    return self::$instance;
+	}
+	  
+	public function getConnection()
+	{
+	    return $this->conn;
+	}
+
+	public function listarProducto()
+	{
+		$instance = Conexion::getInstance();
+        $conn = $instance->getConnection();
+		$instance = 'SELECT idProductos,tipo,marca,modelo from productos';
+        $result = $conn->prepare($instance);
+        $result->execute();
+        $datos=$result->fetchAll();
+		foreach ($datos as $row) {
+            print "<option value='".$row['idProductos']."'>".$row['tipo'].' '.$row['marca'].' '.$row['modelo']."</option>";
+        }
+	}
 }
-	
 ?>
