@@ -19,11 +19,11 @@ USE `bdtienda` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bdtienda`.`tienda` (
   `idTienda` INT(11) NOT NULL AUTO_INCREMENT,
-  `nTienda` VARCHAR(45) NOT NULL,
-  `tEmail` VARCHAR(45) NOT NULL,
+  `nombre` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idTienda`),
   UNIQUE INDEX `idTienda_UNIQUE` (`idTienda` ASC),
-  UNIQUE INDEX `tEmail_UNIQUE` (`tEmail` ASC))
+  UNIQUE INDEX `tEmail_UNIQUE` (`email` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS `bdtienda`.`usuarios` (
   `interes` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idusuario`),
   UNIQUE INDEX `nUsuario_UNIQUE` (`nusuario` ASC),
-  UNIQUE INDEX `idusuarios_UNIQUE` (`idusuario` ASC),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+  UNIQUE INDEX `idusuarios_UNIQUE` (`idusuario` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -75,34 +74,18 @@ CREATE TABLE IF NOT EXISTS `bdtienda`.`productos` (
   `tipo` VARCHAR(45) NOT NULL check (tipo IN ('Movil','Tablet','Ordenador' )),
   `marca` VARCHAR(45) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
-  `precio` INT NOT NULL,
+  `precio` VARCHAR(45) NOT NULL,
   `stock` INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`idProductos`),
-  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `bdtienda`.`vende`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bdtienda`.`vende` (
   `tienda_idTienda` INT(11) NOT NULL,
-  `productos_idProductos` INT(11) NOT NULL,
-  PRIMARY KEY (`tienda_idTienda`, `productos_idProductos`),
-  INDEX `fk_tienda_has_productos_productos1_idx` (`productos_idProductos` ASC),
-  INDEX `fk_tienda_has_productos_tienda1_idx` (`tienda_idTienda` ASC),
-  CONSTRAINT `fk_tienda_has_productos_productos1`
-    FOREIGN KEY (`productos_idProductos`)
-    REFERENCES `bdtienda`.`productos` (`idProductos`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tienda_has_productos_tienda1`
+  PRIMARY KEY (`idProductos`, `tienda_idTienda`),
+  UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC),
+  INDEX `fk_productos_tienda1_idx` (`tienda_idTienda` ASC),
+  CONSTRAINT `fk_productos_tienda1`
     FOREIGN KEY (`tienda_idTienda`)
     REFERENCES `bdtienda`.`tienda` (`idTienda`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
