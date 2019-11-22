@@ -65,17 +65,12 @@
     </div>
     <?php
     if (isset($_POST["enviarUsuario"])) {
-        $nombre = $_POST["nombre"];
-        $interes = $_POST["interes"];
-        $email = $_POST["email"];
- 
-        $nuevoUsuario = "INSERT INTO usuarios (nusuario,email,interes) values ('$nombre','$email','$interes')";
-        $result = $conn->query($nuevoUsuario);
+        $instance->nuevoUsuario();
     }
     ?>
 
     <!-- POP UP PRODUCTO -->
-    <div id="nuevoProducto" class="modal fade">
+    <div id="nuevoProducto">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success">
@@ -109,20 +104,11 @@
 
 
     <?php
-    /*$listarProducto = "SELECT idProductos,tipo,marca,modelo from productos";
-    foreach ($conn->query($listarProducto) as $row) {
-        print $row['idProductos'].' '.$row['tipo'].' '.$row['marca'].' '.$row['modelo'].'<br>';
-    }
-    */
     if (isset($_POST["enviarProducto"])) {
-        $marca = $_POST["marca"];
-        $modelo = $_POST["modelo"];
-        $precio = $_POST["precio"];
-        $tipo = $_POST["tipo"];
- 
-        $nuevoProducto = "INSERT INTO productos (tipo,marca,modelo,precio) values ('$tipo','$marca','$modelo','$precio')";
-        $result = $conn->query($nuevoProducto);
+        $instance->nuevoProducto();
     }
+
+    $instance->comprobarStock();
     ?>
 
     <!-- Optional JavaScript -->
