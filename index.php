@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
 
     <title>Tienda moviles</title>
     <?php
@@ -21,27 +22,30 @@
         $instance = Conexion::getInstance();
         $conn = $instance->getConnection();
         //var_dump($conn);
-
     ?>
-    <h1>Formularios STOCK de tienda de moviles</h1>
+<div id="arreglar_posicion_general">	
+    <p class="titulo">Formularios STOCK de tienda de moviles</p>
     <br><br><br>
-    <div class="container no-gutters">
-        <div class="row align-items-end">
-            <div class="col">
+	
+    <!-- <div class="container no-gutters"> -->
+     <div class="row align-items-end"> 
+        <div class="col">
                 <a href="#nuevoUsuario" role="button" class="btn btn-large btn-primary align-items-start" data-toggle="modal" data-target="#nuevoUsuario">Nuevo usuario</a>
             </div>
-     
-
-            <div class="col">
+		
+		
+            
+			<div class="col">
                 <a href="#nuevoProducto" role="button" class="btn btn-large btn-success align-items-start" data-toggle="modal" data-target="#nuevoProducto">Nuevo producto</a>
-            </div>
+           </div>
+            
 
 
             <div class="col">
                 <a href="#cambioStock" role="button" class="btn btn-large btn-danger align-items-start" data-toggle="modal" data-target="#cambioStock">Cambio stock</a>
             </div>
-        </div>
-    </div>
+       </div> 
+    <!-- </div> -->
 
 
     <!-- POP UP USUARIO ( class="modal fade")-->
@@ -78,6 +82,24 @@
     }
     ?>
 
+	<?php
+	// Validacion formulario usuario
+	if (isset($_POST["enviarUsuario"])) {
+		if(empty($nombre)) {
+		echo "<p class='error_text1'> * Datos vacio por favor inserte un nombre</p>";	
+	} else {
+		if(strlen($nombre) < 2) {
+			
+			echo "<p class='error_text1'> * Inserte un nombre como minimo 3 caracteres</p>";
+		}
+	}
+		if(empty($email)) {
+			echo "<p class='error_text1'> * Datos vacios inserte su correo</p>";	
+	} 
+	
+	}
+	?>
+	
     <!-- POP UP PRODUCTO -->
     <div id="nuevoProducto" class="modal fade">
         <div class="modal-dialog">
@@ -115,6 +137,39 @@
         Producto::nuevoProducto();
     }
     ?>
+	
+		<?php
+	// Validacion formulario usuario
+	if (isset($_POST["enviarProducto"])) {
+		if(empty($marca)) {
+		echo "<p class='error_text2'> * Datos vacios por favor inserte una marca</p>";	
+	} else {
+		if(strlen($marca) < 2) {
+			
+			echo "<p class='error_text2'> * Inserte un nombre como minimo 3 caracteres</p>";
+		}
+	}
+	if(empty($modelo)) {
+		echo "<p class='error_text2'> * Datos vacios por favor inserte un modelo</p>";	
+	} else {
+		if(strlen($modelo) < 2) {
+			
+			echo "<p class='error_text2'> * Inserte un nombre como minimo 3 caracteres</p>";
+		}
+	}
+	
+	if(empty($precio)) {
+		echo "<p class='error_text2'> * Datos vacios por favor inserte un valor</p>";	
+	} else {
+		if(is_numeric($precio)) {
+			
+			echo "<p class='error_text2'> * El campo debe tener un valor numerico</p>";
+		}
+	}
+	 
+	
+	}
+	?>
 
     <!-- POP UP CAMBIO STOCK -->
     <div id="cambioStock" class="modal fade">
@@ -146,14 +201,31 @@
         Producto::cambioStock();
         Producto::comprobarStock();
     }
-
     
     ?>
 
+	<?php
+	if (isset($_POST["enviarStock"])) {
+	
+	if(empty($stock)) {
+		echo "<p class='error_text2'> * Datos vacios por favor inserte un valor</p>";	
+	} else {
+		if(is_numeric($stock)) {
+			
+			echo "<p class='error_text2'> * El campo debe tener un valor numerico</p>";
+		}
+	}
+	
+	}
+	
+	 
+	?>
+	
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </div>
   </body>
 </html>
